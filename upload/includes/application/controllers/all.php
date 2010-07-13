@@ -56,6 +56,7 @@ class All extends Controller
 		$data['parents'] = $this->category_model->get_categories_by_parent(0);
 		foreach($data['parents']->result() as $row)
 		{
+			$data['subcats'][$row->cat_id] = $this->category_model->get_categories_by_parent($row->cat_id);
 			$data['articles'][$row->cat_id] = $this->article_model->get_articles_by_catid($row->cat_id);
 		}
 		$data['title'] = $this->init_model->get_setting('site_name');
