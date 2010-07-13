@@ -14,7 +14,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
 
     <channel>
     
-    <title><?php echo $feed_name; ?></title>
+    <title><![CDATA[<?php echo $feed_name; ?>]]></title>
 
     <link><?php echo $feed_url; ?></link>
     <description><?php echo $page_description; ?></description>
