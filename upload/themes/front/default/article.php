@@ -27,6 +27,20 @@
 	</div>
 	
 	<?php echo $article->article_description; ?>
+
+	<div id="attachments">
+	<?php if ($attach->num_rows() > 0): ?>
+	
+		<fieldset>
+			<legend><h3><?php echo lang('kb_attachments'); ?></h3></legend>
+				<ul>
+					<?php  foreach($attach->result() as $item): ?>
+					<li><a href="<?php echo base_url(); ?>uploads/<?php echo $article->article_id .'/'. $item->attach_name; ?>" target="_blank"><?php echo $item->attach_name; ?></a></li>
+					<?php endforeach; ?>
+				</ul>
+		</fieldset></div>
+	
+	<?php endif; //end attachments ?>
 	
 	
 	<div id="rating">
@@ -43,23 +57,7 @@
 		</form>
 		<?php } ?>
 	</div>
-	
-	<a name="attachments"></a>
-	<?php if ($attach->num_rows() > 0): ?>
-	
-		<fieldset>
-			<legend><?php echo lang('kb_attachments'); ?></legend>
-				<ul>
-					<?php  foreach($attach->result() as $item): ?>
-					<li><a href="<?php echo base_url(); ?>uploads/<?php echo $article->article_id .'/'. $item->attach_name; ?>" target="_blank"><?php echo $item->attach_name; ?></a></li>
-					<?php endforeach; ?>
-				</ul>
-		</fieldset>
-	
-	<?php endif; //end attachments ?>
-
-
-	
+		
 	<div class="meta">
 		
 		<?php  if(isset($article_cats) && $article_cats->num_rows() > 0): ?>
