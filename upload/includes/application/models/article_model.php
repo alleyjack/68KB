@@ -569,6 +569,11 @@ class Article_model extends model
 				{
 					$sDef = $this->_dot($row->g_definition,75);
 					$sDef = str_replace('"', '\'', $sDef);
+					
+					$html_stuff = array("<p>", "</p>");
+					$sDef = str_replace($html_stuff, "", $sDef);
+					
+					
 					$replacement = ' <a href="'.site_url('glossary/term/'.$row->g_term).'" class="tooltip" title="'.$row->g_term.' - '.$sDef.'">'.$row->g_term.'</a> ';
 					$content = preg_replace('/[\b|\s]('.$row->g_term.')[\b|^\s]/i', $replacement, $content, 1);
 				}
