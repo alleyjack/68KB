@@ -28,9 +28,8 @@
 	
 	<?php echo $article->article_description; ?>
 
-	<div id="attachments">
 	<?php if ($attach->num_rows() > 0): ?>
-	
+	<div id="attachments">	
 		<fieldset>
 			<legend><h3><?php echo lang('kb_attachments'); ?></h3></legend>
 				<ul>
@@ -38,7 +37,8 @@
 					<li><a href="<?php echo base_url(); ?>uploads/<?php echo $article->article_id .'/'. $item->attach_name; ?>" target="_blank"><?php echo $item->attach_name; ?></a></li>
 					<?php endforeach; ?>
 				</ul>
-		</fieldset></div>
+		</fieldset>
+	</div>
 	
 	<?php endif; //end attachments ?>
 	
