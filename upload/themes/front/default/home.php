@@ -53,7 +53,10 @@
 		<h2 class="pop"><?php echo lang('kb_most_popular'); ?></h2>
 		<ul class="articles">
 			<?php foreach($pop->result() as $row): ?>
-			<li><a href="<?php echo site_url("article/".$row->article_uri."/"); ?>"><?php echo $row->article_title;?></a></li>
+				<li>
+					<a href="<?php echo site_url("article/".$row->article_uri."/"); ?>"><?php echo $row->article_title;?></a><br>
+					<em>Category: <?php echo $row->cat_name; ?></em>
+				</li>
 			<?php endforeach; ?>
 		</ul>
 	</div>
@@ -62,7 +65,10 @@
 		<h2 class="pop"><?php echo lang('kb_new_articles'); ?></h2>
 		<ul class="articles">
 			<?php foreach($latest->result() as $row): ?>
-			<li><a href="<?php echo site_url("article/".$row->article_uri."/"); ?>"><?php echo $row->article_title;?></a></li>
+				<li>
+					<a href="<?php echo site_url("article/".$row->article_uri."/"); ?>"><?php echo $row->article_title;?></a><br>
+					<em>Category: <?php echo $row->cat_name; ?></em>
+				</li>
 			<?php endforeach; ?>
 		</ul>
 	</div>
