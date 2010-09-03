@@ -315,6 +315,8 @@ class Article_model extends model
 		$this->db->join('article2cat', 'articles.article_id = article2cat.article_id', 'left');
 		$this->db->where('category_id', $id);
 		$this->db->where('article_display', 'Y');
+		$this->db->orderby('article_order', 'DESC');
+		$this->db->orderby('article_title', 'ASC');
 		if ($show_count)
 		{
 			return $this->db->count_all_results();
@@ -408,11 +410,14 @@ class Article_model extends model
 	function get_most_popular($number=25)
 	{
 		$number = (int)$number;
-		$this->db->select('article_uri,article_title')
-					->from('articles')
-					->where('article_display', 'Y')
-					->orderby('article_hits', 'DESC')
-					->limit($number);
+		$this->db->select('articles.article_uri,articles.article_title,categories.cat_name');
+		$this->db->from('articles');
+		$this->db->join('article2cat', 'articles.article_id = article2cat.article_id', 'left');
+		$this->db->join('categories', 'article2cat.category_id = categories.cat_id', 'left');
+		$this->db->where('article_display', 'Y');
+		$this->db->orderby('article_hits', 'DESC');
+		$this->db->groupby('articles.article_uri');
+		$this->db->limit($number);
 		$query = $this->db->get();
 		return $query;
 	}
@@ -457,12 +462,16 @@ class Article_model extends model
 	 */
 	function get_latest($number=25)
 	{
+	
 		$number = (int)$number;
-		$this->db->select('article_uri,article_title')
-					->from('articles')
-					->where('article_display', 'Y')
-					->orderby('article_date', 'DESC')
-					->limit($number);
+		$this->db->select('articles.article_uri,articles.article_title,categories.cat_name');
+		$this->db->from('articles');
+		$this->db->join('article2cat', 'articles.article_id = article2cat.article_id', 'left');
+		$this->db->join('categories', 'article2cat.category_id = categories.cat_id', 'left');
+		$this->db->where('article_display', 'Y');
+		$this->db->orderby('article_date', 'DESC');
+		$this->db->groupby('articles.article_uri');
+		$this->db->limit($number);
 		$query = $this->db->get();
 		return $query;
 	}
@@ -565,17 +574,17 @@ class Article_model extends model
 			foreach ($query->result() as $row)
 			{
 				$pos = strpos(strtolower($content), strtolower($row->g_term));
-				if ($pos !== FALSE) 
+				if ($pos !== false) 
 				{
-					$sDef = $this->_dot($row->g_definition,75);
-					$sDef = str_replace('"', '\'', $sDef);
+					$sDef=$this->_dot($row->g_definition,75);
+					$sDef=str_replace('"', '\'', $sDef);
 					
 					$html_stuff = array("<p>", "</p>");
 					$sDef = str_replace($html_stuff, "", $sDef);
 					
-					
 					$replacement = ' <a href="'.site_url('glossary/term/'.$row->g_term).'" class="tooltip" title="'.$row->g_term.' - '.$sDef.'">'.$row->g_term.'</a> ';
-					$content = preg_replace('/[\b|\s]('.$row->g_term.')[\b|^\s]/i', $replacement, $content, 1);
+					
+					$content = preg_replace('/[\b|\s]('.$row->g_term.')[\b|^\s]/', $replacement, $content, 1);
 				}
 			}
 		}
