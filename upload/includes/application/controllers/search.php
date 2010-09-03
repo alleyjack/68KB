@@ -61,6 +61,7 @@ class Search extends Controller
 				$this->db->where('category_id', $category);
 			}
 			$this->db->where('article_display', 'Y');
+			$this->db->groupby('article_uri');
 			
 			// This is a hack found here:
 			// http://codeigniter.com/forums/viewthread/122223/
