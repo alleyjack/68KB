@@ -482,6 +482,57 @@ class Category_model extends model
 			return false;
 		}
 	}
+
+	function glossary($content)
+	{
+		$this->db->select('g_id,g_term,g_definition')->from('glossary');
+		$query = $this->db->get();
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+				$pos = strpos(strtolower($content), strtolower($row->g_term));
+				if ($pos !== false) 
+				{
+					$sDef=$this->_dot($row->g_definition,75);
+					$sDef=str_replace('"', '\'', $sDef);
+					
+					$html_stuff = array("<p>", "</p>");
+					$sDef = str_replace($html_stuff, "", $sDef);
+					
+					$replacement = ' <a href="'.site_url('glossary/term/'.$row->g_term).'" class="tooltip" title="'.$row->g_term.' - '.$sDef.'">'.$row->g_term.'</a> ';
+					
+					$content = preg_replace('/[\b|\s]('.$row->g_term.')[\b|^\s]/', $replacement, $content, 1);
+				}
+			}
+		}
+		return $content;
+	}
+	
+	
+
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * dot
+	 *
+	 * Trims a string and adds periods to the end
+	 *
+	 * @access	private
+	 * @param	string	the string
+	 * @param	int		the length
+	 * @param	string	the ending value
+	 * @return	string 	the trimmed string
+	 */
+	private function _dot($str, $len, $dots = "...") 
+	{
+		if (strlen($str) > $len) 
+		{
+			$dotlen = strlen($dots);
+			$str = substr_replace($str, $dots, $len - $dotlen);
+		}
+		return $str;
+	}
 }
 	
 /* End of file category_model.php */
